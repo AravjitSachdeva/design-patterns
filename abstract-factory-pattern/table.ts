@@ -1,11 +1,11 @@
-export interface IChair {
+export interface ITable {
   name: string;
   size: string;
   getName(): string;
   getSize(): string;
 }
 
-export class Chair implements IChair {
+export class Table implements ITable {
   name: string;
   size: string;
   constructor(name: string, size: string) {
@@ -21,7 +21,7 @@ export class Chair implements IChair {
   }
 }
 
-export class SmallChair implements IChair {
+export class SmallTable implements ITable {
   name: string;
   size: string;
   constructor(name: string, size: string) {
@@ -37,7 +37,7 @@ export class SmallChair implements IChair {
   }
 }
 
-export class MediumChair implements IChair {
+export class MediumTable implements ITable {
   name: string;
   size: string;
   constructor(name: string, size: string) {
@@ -53,7 +53,7 @@ export class MediumChair implements IChair {
   }
 }
 
-export class LargeChair implements IChair {
+export class LargeTable implements ITable {
   name: string;
   size: string;
   constructor(name: string, size: string) {

@@ -1,8 +1,9 @@
 import { FurnitureFactory } from "./abstract-factory-class";
 
-const resultObject = FurnitureFactory.createFactory("SmallChair");
+const smallFactory = FurnitureFactory.createFactory("small");
 
-const name = resultObject.name;
-const size = resultObject.size;
+const smallChair = smallFactory.createChair();
+const smallSofa = smallFactory.createSofa();
 
-console.log(`Name: ${name} Size: ${size}`);
+const smallChairName = smallChair.getName();
+console.log(`Small Chair Name ${smallChairName}`);
