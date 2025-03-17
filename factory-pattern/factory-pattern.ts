@@ -5,6 +5,16 @@ interface NotificationSender {
   sendNotification(): void;
 }
 
+export type NotificationDetails = {
+  message: string;
+  type: string;
+  isUrgent: boolean;
+  date: string;
+  time: string;
+  param1: string;
+  param2: string;
+};
+
 class EmailNotificationSender implements NotificationSender {
   message = "";
 
@@ -37,16 +47,21 @@ class PushNotificationSender implements NotificationSender {
   sendNotification(): void {
     console.log(`${this.message} Push notification sent`);
   }
+  insertNotification(): void {
+    console.log(`${this.message} Push notification inserted`);
+  }
 }
 
 export class NotificationFactoryClass {
   static createNotificationSender({
     type,
     message,
-  }: {
-    type: string;
-    message: string;
-  }) {
+    isUrgent,
+    date,
+    time,
+    param1,
+    param2,
+  }: NotificationDetails {
     console.log(type, message);
     if (type == "email") {
       return new EmailNotificationSender(message);
