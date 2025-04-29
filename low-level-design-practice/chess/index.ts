@@ -10,9 +10,6 @@
 // start game
 // if the user selects a move, then  we must ensure no other piece exists on the move
 
-// pieces
-// 2 rook, 2 bishop, 2 knight, 1 king, 1 queen, 8 pawns
-
 enum ChessPieces {
   rook1,
   rook2,
@@ -80,8 +77,9 @@ export class ChessGame {
     console.log(this.board);
   }
 
-  showEligibleMoves(piece: ChessPieces, position: board[][]): [][] {
-    // log all the elibible position for the given piece for the
+  showEligibleMoves(piece: ChessPieces, position: board[][]) {
+    // log all the elibible position for the given piece for the given piece
+    // this function will also use the currentPlayer variable to determine the positions
   }
 
   performMove(piece, fromPosition, toPosition): void {
