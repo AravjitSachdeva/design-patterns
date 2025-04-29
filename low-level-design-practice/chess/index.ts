@@ -82,9 +82,41 @@ export class ChessGame {
   showEligibleMoves(piece: ChessPieces, position: Position) {
     // log all the elibible position for the given piece
     if (piece == ChessPieces.bishop1) {
+      this.showEligibleMovesBishop(position);
     }
+
+    if (piece == ChessPieces.rook1 || piece == ChessPieces.rook2) {
+      this.showEligibleMovesRook(position);
+    }
+
+    // same for all the other pieces
+
     // this function will also use the currentPlayer variable to determine the positions
   }
+
+  showEligibleMovesBishop(position: Position) {
+    let row = position.row;
+    let col = position.col;
+
+    // determine all possible squares
+    let allPossibleSquares = [];
+
+    // write a dfs function here to explore all the possible moves
+
+    // return the list
+  }
+
+  showEligibleMovesRook(position: Position) {
+    let row = position.row;
+    let col = position.col;
+
+    // determine all possible squares
+    let allPossibleSquares = [];
+
+    // write a dfs function here to explore all the possible moves
+  }
+
+  // write the functions for all the pieces using dfs
 
   performMove(piece, fromPosition, toPosition): void {
     // validate fromPosition
