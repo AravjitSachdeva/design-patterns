@@ -1,12 +1,12 @@
-import { Color, Position } from "../types";
+import { Color, Position, Square, ChessPieces } from "../types";
 import { Board } from "../board/ChessBoard";
 import { ChessPiece } from "../pieces/ChessPiece";
 
 export class ChessGame {
   private board: Board;
   private currentPlayer: Color;
-  private capturedPiecesBlack: ChessPiece[];
-  private capturedPiecesWhite: ChessPiece[];
+  private capturedPiecesBlack: Square[];
+  private capturedPiecesWhite: Square[];
 
   constructor() {
     this.board = new Board();
@@ -15,53 +15,47 @@ export class ChessGame {
     this.capturedPiecesWhite = [];
   }
 
-  performMove(
-    piece: ChessPiece,
-    fromPosition: Position,
-    toPosition: Position
-  ): void {
+  performMove(piece: ChessPiece, toPosition: Position): void {
     if (piece.color !== this.currentPlayer) {
       throw new Error("Not your turn");
     }
 
-    if (!piece.isEligibleMove(toPosition)) {
+    if (!piece.possibleMoves(toPosition)) {
       throw new Error("Invalid move");
     }
 
     // Check if there's a piece at the destination
-    const targetPiece = this.board.getPiece(toPosition);
-    if (targetPiece) {
-      if (targetPiece.color === piece.color) {
+    const empty = this.board.isEmpty(toPosition);
+    let currentSquare: Square = {
+      piece: ChessPieces.EMPTY,
+      color: Color.NONE,
+    };
+
+    if (!empty) {
+      const currentSquare = this.board.getSquare(toPosition);
+      if (currentSquare.color === this.currentPlayer) {
         throw new Error("Cannot capture your own piece");
+      } else {
+        console.log("Capturing Opponent Piece");
+        this.board.setSquare(toPosition, currentSquare);
       }
-      this.capturePiece(targetPiece);
     }
 
-    // Perform the move
-    piece.move(toPosition);
-    this.switchPlayer();
-  }
+    // add captured piece to the list
 
-  private capturePiece(piece: ChessPiece): void {
-    piece.isCaptured = true;
-    if (piece.color === Color.BLACK) {
-      this.capturedPiecesBlack.push(piece);
+    if (this.currentPlayer === Color.BLACK) {
+      this.capturedPiecesWhite.push(currentSquare);
     } else {
-      this.capturedPiecesWhite.push(piece);
+      this.capturedPiecesBlack.push(currentSquare);
     }
+
+    // switch the player
+    this.switchPlayer();
   }
 
   private switchPlayer(): void {
     this.currentPlayer =
       this.currentPlayer === Color.WHITE ? Color.BLACK : Color.WHITE;
-  }
-
-  showEligibleMoves(piece: ChessPiece): Position[] {
-    return piece.possibleMoves();
-  }
-
-  displayBoard(): void {
-    this.board.display();
   }
 
   getCurrentPlayer(): Color {

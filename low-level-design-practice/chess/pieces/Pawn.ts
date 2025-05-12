@@ -1,65 +1,65 @@
 import { ChessPieces, Color, Position } from "../types";
+import { Board } from "../board/ChessBoard";
 import { ChessPiece } from "./ChessPiece";
 
 export class Pawn extends ChessPiece {
-  private hasMoved: boolean = false;
-
-  constructor(position: Position, color: Color) {
-    super(ChessPieces.PAWN1, position, color);
+  constructor(position: Position, color: Color, board: Board) {
+    super(ChessPieces.PAWN1, position, color, false, board);
   }
 
-  possibleMoves(): Position[] {
+  possibleMoves(position: Position): Position[] {
     const moves: Position[] = [];
-    const direction = this.color === Color.WHITE ? -1 : 1;
 
-    // Forward move
+    const cutPieceRight: Position = {
+      row: this.position.row + 1,
+      col: this.position.col + 1,
+    };
+
+    const cutPieceLeft: Position = {
+      row: this.position.row + 1,
+      col: this.position.col - 1,
+    };
+
     const forwardMove: Position = {
-      row: this.position.row + direction,
+      row: this.position.row + 1,
       col: this.position.col,
     };
 
-    if (this.isWithinBoard(forwardMove)) {
+    const doubleForwardMove: Position = {
+      row: this.position.row + 2,
+      col: this.position.col,
+    };
+
+    if (position.row === 6 && this.color === Color.WHITE) {
+      moves.push(doubleForwardMove);
+    }
+
+    if (position.row === 1 && this.color === Color.BLACK) {
+      moves.push(doubleForwardMove);
+    }
+
+    if (this.board.isEmpty(forwardMove)) {
       moves.push(forwardMove);
     }
 
-    // Initial two-square move
-    if (!this.hasMoved) {
-      const doubleMove: Position = {
-        row: this.position.row + 2 * direction,
-        col: this.position.col,
-      };
-      if (this.isWithinBoard(doubleMove)) {
-        moves.push(doubleMove);
-      }
+    if (
+      !this.board.isEmpty(cutPieceRight) &&
+      this.board.getSquare(cutPieceRight).color !== this.color
+    ) {
+      moves.push(cutPieceRight);
     }
 
-    // Capture moves
-    const captureMoves = [
-      { row: this.position.row + direction, col: this.position.col - 1 },
-      { row: this.position.row + direction, col: this.position.col + 1 },
-    ];
-
-    captureMoves.forEach((move) => {
-      if (this.isWithinBoard(move)) {
-        moves.push(move);
-      }
-    });
+    if (
+      !this.board.isEmpty(cutPieceLeft) &&
+      this.board.getSquare(cutPieceLeft).color !== this.color
+    ) {
+      moves.push(cutPieceLeft);
+    }
 
     return moves;
   }
 
-  isEligibleMove(position: Position): boolean {
-    return this.possibleMoves().some(
-      (move) => move.row === position.row && move.col === position.col
-    );
-  }
-
   convertToQueen(): void {
     this.name = ChessPieces.QUEEN;
-  }
-
-  move(position: Position): void {
-    super.move(position);
-    this.hasMoved = true;
   }
 }

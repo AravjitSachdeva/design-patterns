@@ -1,3 +1,5 @@
+import { Board } from "../board/ChessBoard";
+
 export enum ChessPieces {
   ROOK1 = "ROOK1",
   ROOK2 = "ROOK2",
@@ -41,7 +43,6 @@ export interface IChessPiece {
   position: Position;
   color: Color;
   isCaptured: boolean;
-  possibleMoves: () => Position[];
-  isEligibleMove: (position: Position) => boolean;
-  move: (position: Position) => void;
+  board: Board;
+  possibleMoves: (position: Position) => Position[];
 }
