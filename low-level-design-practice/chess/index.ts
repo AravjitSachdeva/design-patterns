@@ -8,7 +8,8 @@
 // how to find out the eligble moves for each piece type?
 // if no eligble move for king then return winner
 
-enum ChessPieces {
+// All shared types and interfaces
+export enum ChessPieces {
   rook1,
   rook2,
   knight1,
@@ -28,33 +29,50 @@ enum ChessPieces {
   empty,
 }
 
-enum Color {
+export enum Color {
   BLACK,
   WHITE,
   NONE,
 }
 
-interface Position {
+export interface Position {
   row: number;
   col: number;
 }
 
-type Square = {
+export type Square = {
   piece: ChessPieces;
   color: Color;
 };
 
-type ChessBoard = Square[][];
+export type ChessBoard = Square[][];
+
+interface ChessPiece {
+  name: ChessPieces; // rook, knight, etc. - could be enum if you want, but I don't think it's necessary yet
+  position: Position; // location on board
+  color: Color; // again, could be enum if you want
+  isCaptured: boolean; // could convert to a State enum if you'd like
+  possibleMoves: () => Position[]; // array of possible positions the piece could move to
+  isEligibleMove: (position: Position) => boolean; // true or false if piece can move there
+  move: (position: Position) => void; // throw exception if invalid move
+  // ... probably other attributes/functions, but this should be a decent start
+}
+
+interface Pawn extends ChessPiece {
+  convertToQueen: () => void; // pawn reaches other side of board and becomes queen
+}
 
 export class ChessGame {
   private board: ChessBoard;
   private currentPlayer: Color;
-  private capturedPiecesBlack: [];
-  private capturedPiecesWhite: [];
+  private capturedPiecesBlack: ChessPiece[];
+  private capturedPiecesWhite: ChessPiece[];
 
   constructor() {
     this.currentPlayer = Color.WHITE;
-    this.board = this.initializeBoard();
+    this.board = this.initializeBoard();∂
+    this.capturedPiecesBlack = [];
+    this.capturedPiecesWhite = [];
   }
 
   private initializeBoard(): ChessBoard {
@@ -131,3 +149,9 @@ export class ChessGame {
   // remove piece from the position
   // add piece to the list of inactive pieces depending on the player
 }
+
+export * from './types';
+export * from './pieces/ChessPiece';
+export * from './pieces/Pawn';
+export * from './board/ChessBoard';
+export * from './game/ChessGame';
