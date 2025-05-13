@@ -1,7 +1,7 @@
-import { Color, Position, Square, ChessPieces } from "../types";
+import { Color, Position, Square, ChessPieceNames } from "../types";
 import { Board } from "../board/ChessBoard";
 import { ChessPiece } from "../pieces/ChessPiece";
-
+import { EmptyPiece } from "../pieces/EmptyPiece";
 export class ChessGame {
   private board: Board;
   private currentPlayer: Color;
@@ -15,19 +15,23 @@ export class ChessGame {
     this.capturedPiecesWhite = [];
   }
 
-  performMove(piece: ChessPiece, toPosition: Position): void {
+  performMove(
+    piece: ChessPiece,
+    toPosition: Position,
+    fromPosition: Position
+  ): void {
     if (piece.color !== this.currentPlayer) {
       throw new Error("Not your turn");
     }
 
-    if (!piece.possibleMoves(toPosition)) {
+    if (!piece.possibleMoves(fromPosition).includes(toPosition)) {
       throw new Error("Invalid move");
     }
 
     // Check if there's a piece at the destination
     const empty = this.board.isEmpty(toPosition);
     let currentSquare: Square = {
-      piece: ChessPieces.EMPTY,
+      piece: new EmptyPiece({ row: 0, col: 0 }, this.board),
       color: Color.NONE,
     };
 

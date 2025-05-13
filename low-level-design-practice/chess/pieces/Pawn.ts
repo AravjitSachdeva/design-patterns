@@ -1,10 +1,10 @@
-import { ChessPieces, Color, Position } from "../types";
+import { ChessPieceNames, Color, Position } from "../types";
 import { Board } from "../board/ChessBoard";
 import { ChessPiece } from "./ChessPiece";
 
 export class Pawn extends ChessPiece {
   constructor(position: Position, color: Color, board: Board) {
-    super(ChessPieces.PAWN1, position, color, false, board);
+    super(ChessPieceNames.PAWN1, position, color, false, board);
   }
 
   possibleMoves(position: Position): Position[] {
@@ -60,6 +60,6 @@ export class Pawn extends ChessPiece {
   }
 
   convertToQueen(): void {
-    this.name = ChessPieces.QUEEN;
+    this.name = ChessPieceNames.QUEEN;
   }
 }

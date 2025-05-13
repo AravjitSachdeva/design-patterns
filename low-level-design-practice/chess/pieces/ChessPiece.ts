@@ -1,8 +1,8 @@
-import { ChessPieces, Color, Position, IChessPiece } from "../types";
+import { ChessPieceNames, Color, Position, IChessPiece } from "../types";
 import { Board } from "../board/ChessBoard";
 export abstract class ChessPiece implements IChessPiece {
   constructor(
-    public name: ChessPieces,
+    public name: ChessPieceNames,
     public position: Position,
     public color: Color,
     public isCaptured: boolean = false,

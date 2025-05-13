@@ -1,6 +1,7 @@
 import { Board } from "../board/ChessBoard";
+import { ChessPiece } from "../pieces/ChessPiece";
 
-export enum ChessPieces {
+export enum ChessPieceNames {
   ROOK1 = "ROOK1",
   ROOK2 = "ROOK2",
   KNIGHT1 = "KNIGHT1",
@@ -32,14 +33,14 @@ export interface Position {
 }
 
 export type Square = {
-  piece: ChessPieces;
+  piece: ChessPiece;
   color: Color;
 };
 
 export type ChessBoard = Square[][];
 
 export interface IChessPiece {
-  name: ChessPieces;
+  name: ChessPieceNames;
   position: Position;
   color: Color;
   isCaptured: boolean;

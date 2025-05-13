@@ -1,5 +1,7 @@
-import { ChessBoard, ChessPieces, Color, Position, Square } from "../types";
+import { ChessBoard, ChessPieceNames, Color, Position, Square } from "../types";
 import { ChessPiece } from "../pieces/ChessPiece";
+import { EmptyPiece } from "../pieces/EmptyPiece";
+import { PieceFactory } from "../pieces/PieceFactory";
 
 export class Board {
   private board: ChessBoard;
@@ -11,52 +13,89 @@ export class Board {
   private initializeBoard(): ChessBoard {
     const board: ChessBoard = Array(8)
       .fill(null)
-      .map(() =>
+      .map((_, row) =>
         Array(8)
           .fill(null)
-          .map(() => ({
-            piece: ChessPieces.EMPTY,
+          .map((_, col) => ({
+            piece: new EmptyPiece({ row, col }, this),
             color: Color.NONE,
           }))
       );
 
     // Initialize pawns
     const pawnPieces = [
-      ChessPieces.PAWN1,
-      ChessPieces.PAWN2,
-      ChessPieces.PAWN3,
-      ChessPieces.PAWN4,
-      ChessPieces.PAWN5,
-      ChessPieces.PAWN6,
-      ChessPieces.PAWN7,
-      ChessPieces.PAWN8,
+      ChessPieceNames.PAWN1,
+      ChessPieceNames.PAWN2,
+      ChessPieceNames.PAWN3,
+      ChessPieceNames.PAWN4,
+      ChessPieceNames.PAWN5,
+      ChessPieceNames.PAWN6,
+      ChessPieceNames.PAWN7,
+      ChessPieceNames.PAWN8,
     ];
 
     // Place black pawns (row 1)
     for (let col = 0; col < 8; col++) {
-      board[1][col] = { piece: pawnPieces[col], color: Color.BLACK };
+      const position = { row: 1, col };
+      board[1][col] = {
+        piece: PieceFactory.createPiece(
+          pawnPieces[col],
+          position,
+          Color.BLACK,
+          this
+        ),
+        color: Color.BLACK,
+      };
     }
 
     // Place white pawns (row 6)
     for (let col = 0; col < 8; col++) {
-      board[6][col] = { piece: pawnPieces[col], color: Color.WHITE };
+      const position = { row: 6, col };
+      board[6][col] = {
+        piece: PieceFactory.createPiece(
+          pawnPieces[col],
+          position,
+          Color.WHITE,
+          this
+        ),
+        color: Color.WHITE,
+      };
     }
 
     // Initialize other pieces
     const backRowPieces = [
-      ChessPieces.ROOK1,
-      ChessPieces.KNIGHT1,
-      ChessPieces.BISHOP1,
-      ChessPieces.QUEEN,
-      ChessPieces.KING,
-      ChessPieces.BISHOP2,
-      ChessPieces.KNIGHT2,
-      ChessPieces.ROOK2,
+      ChessPieceNames.ROOK1,
+      ChessPieceNames.KNIGHT1,
+      ChessPieceNames.BISHOP1,
+      ChessPieceNames.QUEEN,
+      ChessPieceNames.KING,
+      ChessPieceNames.BISHOP2,
+      ChessPieceNames.KNIGHT2,
+      ChessPieceNames.ROOK2,
     ];
 
     backRowPieces.forEach((piece, col) => {
-      board[0][col] = { piece, color: Color.BLACK };
-      board[7][col] = { piece, color: Color.WHITE };
+      const blackPosition = { row: 0, col };
+      board[0][col] = {
+        piece: PieceFactory.createPiece(
+          piece,
+          blackPosition,
+          Color.BLACK,
+          this
+        ),
+        color: Color.BLACK,
+      };
+
+      const whitePosition = { row: 7, col };
+      board[7][col] = {
+        piece: PieceFactory.createPiece(
+          piece,
+          whitePosition,
+          Color.WHITE,
+          this
+        ),
+        color: Color.WHITE,
+      };
     });
 
     return board;
@@ -71,7 +110,7 @@ export class Board {
   }
 
   isEmpty(position: Position): boolean {
-    return this.board[position.row][position.col].piece === ChessPieces.EMPTY;
+    return this.board[position.row][position.col].piece instanceof EmptyPiece;
   }
 
   display(): void {
